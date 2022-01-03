@@ -106,5 +106,6 @@ button{
   padding: 30px;
   text-align: left;
   border-top: 1px solid black;
+  background: white;
 }
 </style>

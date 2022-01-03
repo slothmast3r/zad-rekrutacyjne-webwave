@@ -40,6 +40,8 @@ li{
 .li-wrapper{
   width: calc(100% / var(--columns-count) - 52px );
   padding: 20px;
+  overflow-wrap: break-word;
+  height: fit-content;
   border: 1px solid black;
   background: white;
   margin: 5px;
