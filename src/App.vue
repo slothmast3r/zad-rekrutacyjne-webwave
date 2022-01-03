@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <h1>Losowe ustawianie elementów na tablicy</h1>
     <transition-group name="flip-list" tag="div" class="table-wrapper">
       <tab-element
           v-for="el in kontener"
@@ -10,9 +11,10 @@
           @component-clicked="selectElement(el)"
       />
     </transition-group>
-    <button @click="kontener = shuffle(kontener);">Shuffle</button>
+    <button @click="kontener = shuffle(kontener);">Wymieszaj</button>
     <input v-model="inputElement.title">
   </div>
+  <div class="footer">Oskar Straszyński</div>
 </template>
 
 <script>
@@ -96,5 +98,13 @@ export default {
 }
 button{
   margin: 10px;
+}
+.footer{
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  padding: 30px;
+  text-align: left;
+  border-top: 1px solid black;
 }
 </style>
