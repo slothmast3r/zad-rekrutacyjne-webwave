@@ -1,3 +1,3 @@
 module.exports = {
-    publicPath: '/zad-rekrutacujne-webwave/'
+    publicPath: '/zad-rekrutacyjne-webwave/'
 }
