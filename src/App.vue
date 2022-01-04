@@ -3,7 +3,7 @@
     <h1>Losowe ustawianie elementów na tablicy</h1>
     <transition-group name="flip-list" tag="div" class="table-wrapper">
       <tab-element
-          v-for="el in kontener"
+          v-for="el in arr"
           :key="el.id"
           :columns-count="columnsCount"
           :is-active="el.isActive"
@@ -11,7 +11,7 @@
           @component-clicked="selectElement(el)"
       />
     </transition-group>
-    <button @click="kontener = shuffle(kontener);">Wymieszaj</button>
+    <button @click="shuffleArr">Wymieszaj</button>
     <input v-model="inputElement.title">
   </div>
   <div class="footer">Oskar Straszyński</div>
@@ -21,6 +21,8 @@
 
 
 import TabElement from "@/components/TabElement";
+import { shuffle } from "../script/algorithms";
+
 export default {
   name: 'App',
   components: {
@@ -28,7 +30,7 @@ export default {
   },
   data(){
     return {
-      kontener: [],
+      arr: [],
       elementsCount: 6,
       columnsCount: 3,
       inputElement: {title: ''},
@@ -39,36 +41,16 @@ export default {
   },
   methods:{
     createData(){
-      for (let i = 0; i < this.elementsCount; i++) {
-        let obj = {
-          title : 'Tytuł '+ (i+1),
-          id : 'kontener' + i,
-          isActive: false,
-        }
-        this.kontener.push(obj)
-      }
+      this.arr =[...Array(6)].map((item, index) => ({title:'Tytuł' + index, id:  index, isActive: false}))
     },
-    shuffle(array) {
-      let currentIndex = array.length,  randomIndex;
-
-      while (currentIndex != 0) {
-
-        randomIndex = Math.floor(Math.random() * currentIndex);
-        currentIndex--;
-
-        [array[currentIndex], array[randomIndex]] = [
-          array[randomIndex], array[currentIndex]];
-      }
-      return array;
+    shuffleArr(){
+      this.arr = shuffle(this.arr);
     },
     selectElement(el){
       this.inputElement.isActive = false
       this.inputElement = el
       this.inputElement.isActive = true
     },
-    deselectElement(){
-      this.inputElement = false
-    }
   }
 }
 </script>

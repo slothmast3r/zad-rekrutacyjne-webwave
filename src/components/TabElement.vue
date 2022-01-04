@@ -33,10 +33,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-li{
-  margin: 0;
-  padding: 0;
-}
 .li-wrapper{
   width: calc(100% / var(--columns-count) - 52px );
   padding: 20px;
