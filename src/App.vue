@@ -1,18 +1,30 @@
 <template>
   <div id="app">
     <h1>Losowe ustawianie elementów na tablicy</h1>
-    <transition-group name="flip-list" tag="div" class="table-wrapper">
+    <transition-group name="flip-list" tag="div" class="table-wrapper" v-click-outside="deselectElement">
       <tab-element
-          v-for="el in arr"
+          v-for="el in arrList"
           :key="el.id"
-          :columns-count="columnsCount"
+          :columns-count="Number(columnsCount)"
           :is-active="el.isActive"
           :title="el.title"
           @component-clicked="selectElement(el)"
       />
     </transition-group>
-    <button @click="shuffleArr">Wymieszaj</button>
-    <input v-model="inputElement.title">
+    <div>
+      <button @click="shuffleArr">Wymieszaj</button>
+    </div>
+    <div>
+    <input v-model="inputElement.title" :placeholder="'Zmień tytuł'">
+    </div>
+    <div>
+      <div>Liczba Elementów</div>
+      <input type="range" :min="minAmountOfElements" :max="maxAmountOfElements" v-model="elementsCount">
+    </div>
+    <div>
+      <div>Liczba Kolumn</div>
+      <input type="range" :min="minAmountOfRows" :max="maxAmountOfRows" v-model="columnsCount">
+    </div>
   </div>
   <div class="footer">Oskar Straszyński</div>
 </template>
@@ -22,9 +34,13 @@
 
 import TabElement from "@/components/TabElement";
 import { shuffle } from "../script/algorithms";
+import vClickOutside from "v-click-outside";
 
 export default {
   name: 'App',
+  directives: {
+    clickOutside: vClickOutside.directive
+  },
   components: {
     TabElement
   },
@@ -34,6 +50,15 @@ export default {
       elementsCount: 6,
       columnsCount: 3,
       inputElement: {title: ''},
+      minAmountOfElements: 2,
+      maxAmountOfElements: 40,
+      minAmountOfRows: 2,
+      maxAmountOfRows: 10,
+    }
+  },
+  computed:{
+    arrList(){
+      return this.arr.filter((x,index)=> index < this.elementsCount)
     }
   },
   created() {
@@ -41,7 +66,7 @@ export default {
   },
   methods:{
     createData(){
-      this.arr =[...Array(6)].map((item, index) => ({title:'Tytuł' + index, id:  index, isActive: false}))
+      this.arr = [...Array(this.maxAmountOfElements)].map((item, index) => ({title:'Tytuł ' + index, id:  index, isActive: false}))
     },
     shuffleArr(){
       this.arr = shuffle(this.arr);
@@ -51,6 +76,11 @@ export default {
       this.inputElement = el
       this.inputElement.isActive = true
     },
+    deselectElement(){
+      console.log('aaa')
+      this.inputElement.isActive = false
+      this.inputElement = undefined
+    }
   }
 }
 </script>
@@ -64,19 +94,25 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  margin: 60px 0 120px 0;
 }
 
 .table-wrapper{
   display: flex;
   list-style-type: none;
   flex-wrap: wrap;
-  margin-bottom: 40px;
+  margin-bottom: 30px;
 }
 
 
 .flip-list-move {
   transition: transform 0.8s ease;
+}
+.flip-list-enter-active, .flip-list-leave-active {
+  transition: opacity .5s;
+}
+.flip-list-enter, .flip-list-leave-to,{
+  opacity: 0;
 }
 button{
   margin: 10px;
